@@ -12,7 +12,7 @@ import {
   Switch
 } from 'react-router-dom'
 
-import Page from '../components/Page'
+import Page from './Page'
 import Home from '../components/Home'
 import Base from '../components/Base'
 

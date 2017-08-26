@@ -25,7 +25,10 @@ const Page = (PageTemplate, pageName) => {
     const { pageData } = this.props
   
     return (
-      <PageTemplate {...this.props} pageData={pageData} />
+      <div>
+        {!pageData.isFetching && 
+        <PageTemplate {...this.props} pageData={pageData} />}
+      </div>
       )
     }
   }
