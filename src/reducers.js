@@ -1,10 +1,34 @@
 import { combineReducers } from 'redux'
 import {
+  REQUEST_PRIMARY_NAVIGATION,
+  RECEIVE_PRIMARY_NAVIGATION,
   SELECT_SUBREDDIT,
   INVALIDATE_SUBREDDIT,
   REQUEST_POSTS,
   RECEIVE_POSTS
 } from './actions'
+
+function primaryNavigation(
+  state = {
+    isFetching: false, 
+    links: { html: '' } 
+  }, 
+  action
+) {
+    switch (action.type) {
+      case RECEIVE_PRIMARY_NAVIGATION:
+        return Object.assign({}, state, {
+            isFetching: false,
+            links: action.links
+        })
+      case REQUEST_PRIMARY_NAVIGATION:
+        return Object.assign({}, state, {
+            isFetching: true
+        })
+      default:
+        return state
+    }
+  }
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
@@ -59,6 +83,7 @@ function postsBySubreddit(state = {}, action) {
 }
 
 const rootReducer = combineReducers({
+  primaryNavigation,  
   postsBySubreddit,
   selectedSubreddit
 })

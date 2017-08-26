@@ -2,12 +2,14 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
+  fetchPrimaryNavigation,  
   selectSubreddit,
   fetchPostsIfNeeded,
   invalidateSubreddit
 } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
+import PrimaryNavigation from '../components/PrimaryNavigation'
 
 class AsyncApp extends Component {
   constructor(props) {
@@ -18,6 +20,7 @@ class AsyncApp extends Component {
 
   componentDidMount() {
     const { dispatch, selectedSubreddit } = this.props
+    dispatch(fetchPrimaryNavigation())
     dispatch(fetchPostsIfNeeded(selectedSubreddit))
   }
 
@@ -42,9 +45,11 @@ class AsyncApp extends Component {
   }
 
   render() {
-    const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
+    const { primaryNavigation, selectedSubreddit, posts, isFetching, lastUpdated } = this.props
+
     return (
       <div>
+        <PrimaryNavigation links={primaryNavigation.links}/>  
         <Picker
           value={selectedSubreddit}
           onChange={this.handleChange}
@@ -57,9 +62,9 @@ class AsyncApp extends Component {
               {' '}
             </span>}
           {!isFetching &&
-            <a href="#" onClick={this.handleRefreshClick}>
+            <button onClick={this.handleRefreshClick}>
               Refresh
-            </a>}
+            </button>}
         </p>
         {isFetching && posts.length === 0 && <h2>Loading...</h2>}
         {!isFetching && posts.length === 0 && <h2>Empty.</h2>}
@@ -73,6 +78,7 @@ class AsyncApp extends Component {
 }
 
 AsyncApp.propTypes = {
+  primaryNavigation: PropTypes.object.isRequired,  
   selectedSubreddit: PropTypes.string.isRequired,
   posts: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
@@ -81,7 +87,7 @@ AsyncApp.propTypes = {
 }
 
 function mapStateToProps(state) {
-  const { selectedSubreddit, postsBySubreddit } = state
+  const { primaryNavigation, selectedSubreddit, postsBySubreddit } = state
   const {
     isFetching,
     lastUpdated,
@@ -92,6 +98,7 @@ function mapStateToProps(state) {
   }
 
   return {
+    primaryNavigation,
     selectedSubreddit,
     posts,
     isFetching,

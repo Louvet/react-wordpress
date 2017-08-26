@@ -1,9 +1,38 @@
 import fetch from 'isomorphic-fetch'
 
+export const REQUEST_PRIMARY_NAVIGATION = 'REQUEST_PRIMARY_NAVIGATION'
+export const RECEIVE_PRIMARY_NAVIGATION = 'RECEIVE_PRIMARY_NAVIGATION'
+
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
 export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
+
+function requestPrimaryNavigation() {
+    return {
+        type: REQUEST_PRIMARY_NAVIGATION
+    }
+}
+
+function receivePrimaryNavigation(json) {
+  return {
+      type: RECEIVE_PRIMARY_NAVIGATION,
+      links: json
+  }
+}
+
+export function fetchPrimaryNavigation() {
+  return dispatch => {
+    dispatch(requestPrimaryNavigation())
+    return fetch(`http://dev.louvet.pro/wp-json/myroutes/menu`)
+      .then(response => response.json())
+      .then(json => dispatch(receivePrimaryNavigation(json)))
+  }
+}
+
+
+
+
 
 export function selectSubreddit(subreddit) {
   return {
