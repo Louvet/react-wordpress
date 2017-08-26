@@ -12,24 +12,28 @@ import {
   Switch
 } from 'react-router-dom'
 
+import Page from '../components/Page'
 import Home from '../components/Home'
-import Competences from '../components/Competences'
+import Base from '../components/Base'
 
 import PrimaryNavigation from '../components/PrimaryNavigation'
 
 class AsyncApp extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(fetchPrimaryNavigation())
   }
 
   getPostSlug(post) {
     const templates = {
-      'home'       : Home,
-      'competences': Competences
+      '/': Home
     }
-    const url = post.url.replace('http://163.172.98.183/', '').replace(/\//g, '');
+    let url = post.url.replace('http://163.172.98.183/', '/')
 
-    return url.length > 0 ? { component: templates[url], path: url } : { component: templates['home'], path: '' }
+    if(1 < url.length) {
+      url = url.slice(0, -1)
+    }
+
+    return { component: templates[url]? templates[url]:Base, path: url }
   }
 
   buildRoutes(data){
@@ -37,7 +41,7 @@ class AsyncApp extends Component {
         const slug = this.getPostSlug(page)
 
           return(
-              <Route key={i} path={`/${slug.path}`} component={ slug.component } exact />
+              <Route key={i} path={ slug.path } component={ Page(slug.component, slug.path) } exact />
           )
       })     
   }

@@ -1,5 +1,8 @@
 import fetch from 'isomorphic-fetch'
 
+export const REQUEST_PAGE = 'REQUEST_PAGE'
+export const RECEIVE_PAGE = 'RECEIVE_PAGE'
+
 export const REQUEST_PRIMARY_NAVIGATION = 'REQUEST_PRIMARY_NAVIGATION'
 export const RECEIVE_PRIMARY_NAVIGATION = 'RECEIVE_PRIMARY_NAVIGATION'
 
@@ -7,19 +10,6 @@ export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
 export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
-
-function requestPrimaryNavigation() {
-    return {
-        type: REQUEST_PRIMARY_NAVIGATION
-    }
-}
-
-function receivePrimaryNavigation(json) {
-  return {
-      type: RECEIVE_PRIMARY_NAVIGATION,
-      links: json
-  }
-}
 
 export function fetchPrimaryNavigation() {
   return dispatch => {
@@ -29,6 +19,46 @@ export function fetchPrimaryNavigation() {
       .then(json => dispatch(receivePrimaryNavigation(json)))
   }
 }
+
+function requestPrimaryNavigation() {
+  return {
+      type: REQUEST_PRIMARY_NAVIGATION
+  }
+}
+
+function receivePrimaryNavigation(json) {
+  return {
+    type: RECEIVE_PRIMARY_NAVIGATION,
+    links: json
+  }
+}
+
+export function fetchPage(pageName) {
+  return dispatch => {
+    dispatch(requestPage())
+    return fetch(`http://dev.louvet.pro/wp-json/myroutes/page=` + pageName)
+      .then(response => response.json())
+      .then(json => dispatch(receivePage(json)))
+  }
+}
+
+function requestPage() {
+  return {
+      type: REQUEST_PAGE
+  }
+}
+
+function receivePage(json) {
+  return {
+    type: RECEIVE_PAGE,
+    title: json.title,
+    excerpt: json.excerpt,
+    content: json.content,
+    thumbnail: json.thumbnail,
+    publication: json.publication
+  }
+}
+
 
 
 

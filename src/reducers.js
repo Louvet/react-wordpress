@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux'
 import {
+  REQUEST_PAGE,
+  RECEIVE_PAGE,
   REQUEST_PRIMARY_NAVIGATION,
   RECEIVE_PRIMARY_NAVIGATION,
   SELECT_SUBREDDIT,
@@ -7,6 +9,36 @@ import {
   REQUEST_POSTS,
   RECEIVE_POSTS
 } from './actions'
+
+function pageData(
+  state = {
+    isFetching: false,
+    title: '',
+    excerpt: '',
+    content: '',
+    thumbnail: '',
+    publication: ''
+  },
+  action
+) {
+  switch(action.type) {
+    case RECEIVE_PAGE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        title: action.title,
+        excerpt: action.excerpt,
+        content: action.content,
+        thumbnail: action.thumbnail,
+        publication: action.publication
+      })
+    case REQUEST_PAGE:
+      return Object.assign({}, state, {
+        isFetching: true
+      })  
+    default:
+      return state
+  }
+}
 
 function primaryNavigation(
   state = {
@@ -83,6 +115,7 @@ function postsBySubreddit(state = {}, action) {
 }
 
 const rootReducer = combineReducers({
+  pageData,
   primaryNavigation,  
   postsBySubreddit,
   selectedSubreddit
