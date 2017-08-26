@@ -11,7 +11,7 @@ import {
 function primaryNavigation(
   state = {
     isFetching: false, 
-    links: { html: '' } 
+    links: { html: '', tree: null } 
   }, 
   action
 ) {

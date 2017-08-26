@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
 export default class PrimaryNavigation extends Component {
   constructor(props) {
@@ -9,7 +10,7 @@ export default class PrimaryNavigation extends Component {
   }
 
   handleNavigationLinkClick(e) {
-    e.preventDefault()
+    //e.preventDefault()
   }
 
   componentWillUpdate() {
@@ -28,13 +29,24 @@ export default class PrimaryNavigation extends Component {
     }.bind(this));
   }
 
-  createMarkup() { 
-    return {__html: this.props.links.html}; 
+  createMarkup() {
+    return {__html: this.props.links.html.replace(/http:\/\/163.172.98.183\//g, '/')}; 
   }
 
   render() {
+    const { links } = this.props
+
+    //<div dangerouslySetInnerHTML={this.createMarkup()}></div>
+
     return (
-      <div dangerouslySetInnerHTML={this.createMarkup()}></div>
+      <div>
+        {links.html.length <= 0 && <h2>Loading...</h2>}
+        {links.html.length > 0 &&
+        <div id="primary-nav">
+          { links.tree.map((link, i) => <Link key={i} to={link.url.replace(/http:\/\/163.172.98.183\//g, '/')}>{link.title}</Link>  ) }
+        </div>
+        }
+      </div>
     )
   }
 }

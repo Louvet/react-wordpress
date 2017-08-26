@@ -2,107 +2,77 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
-  fetchPrimaryNavigation,  
-  selectSubreddit,
-  fetchPostsIfNeeded,
-  invalidateSubreddit
+  fetchPrimaryNavigation
 } from '../actions'
-import Picker from '../components/Picker'
-import Posts from '../components/Posts'
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect,
+  Switch
+} from 'react-router-dom'
+
+import Home from '../components/Home'
+import Competences from '../components/Competences'
+
 import PrimaryNavigation from '../components/PrimaryNavigation'
 
 class AsyncApp extends Component {
-  constructor(props) {
-    super(props)
-    this.handleChange = this.handleChange.bind(this)
-    this.handleRefreshClick = this.handleRefreshClick.bind(this)
-  }
-
   componentDidMount() {
-    const { dispatch, selectedSubreddit } = this.props
-    dispatch(fetchPrimaryNavigation())
-    dispatch(fetchPostsIfNeeded(selectedSubreddit))
+    this.props.dispatch(fetchPrimaryNavigation())
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.selectedSubreddit !== prevProps.selectedSubreddit) {
-      const { dispatch, selectedSubreddit } = this.props
-      dispatch(fetchPostsIfNeeded(selectedSubreddit))
+  getPostSlug(post) {
+    const templates = {
+      'home'       : Home,
+      'competences': Competences
     }
+    const url = post.url.replace('http://163.172.98.183/', '').replace(/\//g, '');
+
+    return url.length > 0 ? { component: templates[url], path: url } : { component: templates['home'], path: '' }
   }
 
-  handleChange(nextSubreddit) {
-    this.props.dispatch(selectSubreddit(nextSubreddit))
-    this.props.dispatch(fetchPostsIfNeeded(nextSubreddit))
-  }
+  buildRoutes(data){
+      return data.map((page, i) => {
+        const slug = this.getPostSlug(page)
 
-  handleRefreshClick(e) {
-    e.preventDefault()
-
-    const { dispatch, selectedSubreddit } = this.props
-    dispatch(invalidateSubreddit(selectedSubreddit))
-    dispatch(fetchPostsIfNeeded(selectedSubreddit))
+          return(
+              <Route key={i} path={`/${slug.path}`} component={ slug.component } exact />
+          )
+      })     
   }
 
   render() {
-    const { primaryNavigation, selectedSubreddit, posts, isFetching, lastUpdated } = this.props
+    const { primaryNavigation } = this.props
 
     return (
       <div>
-        <PrimaryNavigation links={primaryNavigation.links}/>  
-        <Picker
-          value={selectedSubreddit}
-          onChange={this.handleChange}
-          options={['reactjs', 'frontend']}
-        />
-        <p>
-          {lastUpdated &&
-            <span>
-              Last updated at {new Date(lastUpdated).toLocaleTimeString()}.
-              {' '}
-            </span>}
-          {!isFetching &&
-            <button onClick={this.handleRefreshClick}>
-              Refresh
-            </button>}
-        </p>
-        {isFetching && posts.length === 0 && <h2>Loading...</h2>}
-        {!isFetching && posts.length === 0 && <h2>Empty.</h2>}
-        {posts.length > 0 &&
-          <div style={{ opacity: isFetching ? 0.5 : 1 }}>
-            <Posts posts={posts} />
-          </div>}
-      </div>
+      {primaryNavigation.links.html.length > 0 &&
+        <Router>
+          <div>
+            <PrimaryNavigation links={primaryNavigation.links}/>
+            <Switch>
+              {this.buildRoutes(primaryNavigation.links.tree)}
+              <Route render={() => { return <Redirect to="/" /> }} />
+            </Switch> 
+          </div>
+        </Router>
+      }
+    </div>
     )
   }
 }
 
 AsyncApp.propTypes = {
-  primaryNavigation: PropTypes.object.isRequired,  
-  selectedSubreddit: PropTypes.string.isRequired,
-  posts: PropTypes.array.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  lastUpdated: PropTypes.number,
+  primaryNavigation: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
-  const { primaryNavigation, selectedSubreddit, postsBySubreddit } = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: posts
-  } = postsBySubreddit[selectedSubreddit] || {
-    isFetching: true,
-    items: []
-  }
+  const { primaryNavigation } = state
 
   return {
-    primaryNavigation,
-    selectedSubreddit,
-    posts,
-    isFetching,
-    lastUpdated
+    primaryNavigation
   }
 }
 
