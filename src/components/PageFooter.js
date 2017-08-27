@@ -4,7 +4,7 @@ class PageFooter extends Component {
   render() {
     return (
       <div>
-        &copy; 2017 Vincent Louvet, tous droits réservés.
+        &copy; {(new Date()).getFullYear()} Vincent Louvet, tous droits réservés.
       </div>    
     )
   }

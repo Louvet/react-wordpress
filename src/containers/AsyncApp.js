@@ -37,13 +37,42 @@ class AsyncApp extends Component {
   }
 
   buildRoutes(data){
-      return data.map((page, i) => {
-        const slug = this.getPostSlug(page)
+    return data.map((page, i) => {
+      const slug = this.getPostSlug(page)
 
-          return(
+        return(
+            <Route key={i} path={ slug.path } component={ Page(slug.component, slug.path) } exact />
+        )
+    })     
+  }
+
+  buildRoutes(data){
+    let slug = {}
+    const getPostSlug = this.getPostSlug
+
+    return(
+      <Switch>
+        {data.map(function(menuItem, i) {
+          slug = getPostSlug(menuItem)
+          if (menuItem.menu_item_children.length>0) {
+              return (
+                <div>
+                  <Route key={i} path={ slug.path } component={ Page(slug.component, slug.path) } exact/>
+                  {menuItem.menu_item_children.map(function(subMenu, i) {
+                    slug = getPostSlug(subMenu)
+                    return <Route key={i} path={ slug.path } component={ Page(slug.component, slug.path) } exact />
+                  })}
+                </div>
+              )
+          } else {          
+            return (
               <Route key={i} path={ slug.path } component={ Page(slug.component, slug.path) } exact />
-          )
-      })     
+            )
+          }
+        })}
+        <Route render={() => { return <Redirect to="/" /> }} />
+      </Switch> 
+    )   
   }
 
   render() {
@@ -51,18 +80,15 @@ class AsyncApp extends Component {
 
     return (
       <div>
-      {primaryNavigation.links.html.length > 0 &&
-        <Router>
-          <div>
-            <PrimaryNavigation links={primaryNavigation.links}/>
-            <Switch>
+        {primaryNavigation.links.tree != null &&
+          <Router>
+            <div>
+              <PrimaryNavigation links={primaryNavigation.links}/>
               {this.buildRoutes(primaryNavigation.links.tree)}
-              <Route render={() => { return <Redirect to="/" /> }} />
-            </Switch> 
-          </div>
-        </Router>
-      }
-    </div>
+            </div>
+          </Router>
+        }
+      </div>
     )
   }
 }
