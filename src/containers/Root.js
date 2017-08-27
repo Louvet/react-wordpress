@@ -13,6 +13,14 @@ injectGlobal`
     padding: 0;
     background: #F2F2F2;
   }
+
+  .transition-wrapper{
+    position: relative;
+  }
+
+  .transition-wrapper .page {
+    position: absolute;
+  }
 `
 const theme = {
   primary:  '#666666'

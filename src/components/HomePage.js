@@ -1,13 +1,16 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import PrimaryNavigation from '../components/PrimaryNavigation'
 import PageFooter from '../components/PageFooter'
 
-class Base extends Component {
+class HomePage extends Component {
   render() {
-    const { pageData } = this.props
+    const { pageData, primaryNavigation } = this.props
 
     return (
-      <div className="page">  
-        {!pageData && <h2>Loading...</h2>}
+      <div className="page"> 
+        <PrimaryNavigation links={primaryNavigation.links}/> 
         {pageData &&
         <section>
           { pageData.thumbnail &&  
@@ -30,4 +33,17 @@ class Base extends Component {
   }
 }
 
-export default Base
+HomePage.propTypes = {
+  primaryNavigation: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
+}
+
+function mapStateToProps(state) {
+  const { primaryNavigation } = state
+
+  return {
+    primaryNavigation
+  }
+}
+
+export default connect(mapStateToProps)(HomePage)

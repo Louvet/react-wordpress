@@ -11,12 +11,13 @@ import {
   Redirect,
   Switch
 } from 'react-router-dom'
+import { RouteTransition } from 'react-router-transition'
 
 import Page from './Page'
-import Home from '../components/Home'
-import Base from '../components/Base'
+import HomePage from '../components/HomePage'
+import BasePage from '../components/BasePage'
 
-import PrimaryNavigation from '../components/PrimaryNavigation'
+
 
 class AsyncApp extends Component {
   componentWillMount() {
@@ -25,7 +26,7 @@ class AsyncApp extends Component {
 
   getPostSlug(post) {
     const templates = {
-      '/': Home
+      '/': HomePage
     }
     let url = post.url.replace('http://163.172.98.183/', '/')
 
@@ -33,7 +34,7 @@ class AsyncApp extends Component {
       url = url.slice(0, -1)
     }
 
-    return { component: templates[url]? templates[url]:Base, path: url }
+    return { component: templates[url]? templates[url]:BasePage, path: url }
   }
 
   buildRoutes(data){
@@ -79,13 +80,21 @@ class AsyncApp extends Component {
     const { primaryNavigation } = this.props
 
     return (
-      <div>
+      <div>  
         {primaryNavigation.links.tree != null &&
           <Router>
-            <div>
-              <PrimaryNavigation links={primaryNavigation.links}/>
-              {this.buildRoutes(primaryNavigation.links.tree)}
-            </div>
+            <Route render={({ location }) => (
+              <RouteTransition className="transition-wrapper"
+                pathname={location.pathname}
+                atEnter={{ translateX: 100 }}
+                atLeave={{ translateX: 0 }}
+                atActive={{ translateX: 0 }}
+                mapStyles={styles => ({ transform: `translateX(${styles.translateX}%)` })}
+                >
+                
+                {this.buildRoutes(primaryNavigation.links.tree)}
+              </RouteTransition>
+            )}/>
           </Router>
         }
       </div>
@@ -94,7 +103,6 @@ class AsyncApp extends Component {
 }
 
 AsyncApp.propTypes = {
-  primaryNavigation: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
