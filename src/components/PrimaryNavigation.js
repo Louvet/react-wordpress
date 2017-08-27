@@ -8,12 +8,25 @@ export default class PrimaryNavigation extends Component {
 
     return (
       <div>
-        {links.html.length <= 0 && <h2>Loading...</h2>}
-        {links.html.length > 0 &&
-        <div id="primary-nav">
-          { links.tree.map((link, i) => <NavLink key={i} to={link.url.replace(/http:\/\/163.172.98.183\//g, '/')}>{link.title}</NavLink>  ) }
-        </div>
-        }
+        <ul>
+        {links.tree.map(function(menuItem, i) {
+          if (menuItem.menu_item_children.length>0) {
+              return (
+                <li key={i}><NavLink to={menuItem.url.replace(/http:\/\/163.172.98.183\//g, '/')}>{menuItem.title}</NavLink>
+                  <ul>
+                      {menuItem.menu_item_children.map(function(subMenu, i) {
+                          return <li key={i}><NavLink to={subMenu.url.replace(/http:\/\/163.172.98.183\//g, '/')}>{subMenu.title}</NavLink></li>;
+                      })}
+                  </ul>
+                </li>
+              )
+          } else {
+            return (
+              <li key={i}><NavLink to={menuItem.url.replace(/http:\/\/163.172.98.183\//g, '/')}>{menuItem.title}</NavLink></li>
+            )
+          }
+        })}
+        </ul>
       </div>
     )
   }
