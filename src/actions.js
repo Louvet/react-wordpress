@@ -31,12 +31,12 @@ function receivePrimaryNavigation(json) {
 
 function shouldFetchPage(state, pageName) {
   const page = state.pageByName[pageName]
-  if (!page) {
-    return true
-  } else if (page.isFetching) {
+  if(state.isFetching) {
     return false
+  } else if (!page) {
+    return true
   } 
-
+  
   return false
 }
 

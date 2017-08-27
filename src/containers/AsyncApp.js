@@ -12,15 +12,14 @@ import {
   Switch
 } from 'react-router-dom'
 import { RouteTransition } from 'react-router-transition'
+import spring from 'react-motion/lib/spring';
 
 import Page from './Page'
 import HomePage from '../components/HomePage'
 import BasePage from '../components/BasePage'
 
-
-
 class AsyncApp extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.dispatch(fetchPrimaryNavigation())
   }
 
@@ -37,22 +36,12 @@ class AsyncApp extends Component {
     return { component: templates[url]? templates[url]:BasePage, path: url }
   }
 
-  buildRoutes(data){
-    return data.map((page, i) => {
-      const slug = this.getPostSlug(page)
-
-        return(
-            <Route key={i} path={ slug.path } component={ Page(slug.component, slug.path) } exact />
-        )
-    })     
-  }
-
-  buildRoutes(data){
+  buildRoutes(data, location){
     let slug = {}
     const getPostSlug = this.getPostSlug
 
     return(
-      <Switch>
+      <Switch location={location}>
         {data.map(function(menuItem, i) {
           slug = getPostSlug(menuItem)
           if (menuItem.menu_item_children.length>0) {
@@ -78,6 +67,8 @@ class AsyncApp extends Component {
 
   render() {
     const { primaryNavigation } = this.props
+    const fadeConfig = { stiffness: 200, damping: 22 }
+    const slideConfig = { stiffness: 330, damping: 30 }
 
     return (
       <div>  
@@ -86,13 +77,14 @@ class AsyncApp extends Component {
             <Route render={({ location }) => (
               <RouteTransition className="transition-wrapper"
                 pathname={location.pathname}
-                atEnter={{ translateX: 100 }}
-                atLeave={{ translateX: 0 }}
-                atActive={{ translateX: 0 }}
-                mapStyles={styles => ({ transform: `translateX(${styles.translateX}%)` })}
+
+                atEnter={{ opacity: 0, offset: 100 }} 
+                atLeave={{ opacity: spring(0, fadeConfig), offset: spring(-100, slideConfig) }} 
+                atActive={{ opacity: spring(1, slideConfig), offset: spring(0, slideConfig) }} 
+                mapStyles={styles => ({ opacity: styles.opacity, transform: `translateX(${styles.offset}%)` })}
                 >
                 
-                {this.buildRoutes(primaryNavigation.links.tree)}
+                {this.buildRoutes(primaryNavigation.links.tree, location)}
               </RouteTransition>
             )}/>
           </Router>
