@@ -4,37 +4,40 @@ import {
   RECEIVE_PAGE,
   REQUEST_PRIMARY_NAVIGATION,
   RECEIVE_PRIMARY_NAVIGATION,
-  SELECT_SUBREDDIT,
-  INVALIDATE_SUBREDDIT,
-  REQUEST_POSTS,
-  RECEIVE_POSTS
 } from './actions'
 
-function pageData(
+function pages(
   state = {
     isFetching: false,
-    title: '',
-    excerpt: '',
-    content: '',
-    thumbnail: '',
-    publication: ''
+    items: {}
   },
   action
 ) {
   switch(action.type) {
     case RECEIVE_PAGE:
+      let item = {};
+      item[action.pageName] = action.pageData
+
       return Object.assign({}, state, {
         isFetching: false,
-        title: action.title,
-        excerpt: action.excerpt,
-        content: action.content,
-        thumbnail: action.thumbnail,
-        publication: action.publication
+        items: Object.assign({}, state.items, item)
       })
     case REQUEST_PAGE:
       return Object.assign({}, state, {
         isFetching: true
       })  
+    default:
+      return state
+  }
+}
+
+function pageByName(state = {}, action) {
+  switch (action.type) {
+    case RECEIVE_PAGE:
+    case REQUEST_PAGE:
+      return Object.assign({}, state, {
+        [action.pageName]: pages(state[action.pageName], action)
+      })
     default:
       return state
   }
@@ -62,63 +65,10 @@ function primaryNavigation(
     }
   }
 
-function selectedSubreddit(state = 'reactjs', action) {
-  switch (action.type) {
-    case SELECT_SUBREDDIT:
-      return action.subreddit
-    default:
-      return state
-  }
-}
-
-function posts(
-  state = {
-    isFetching: false,
-    didInvalidate: false,
-    items: []
-  },
-  action
-) {
-  switch (action.type) {
-    case INVALIDATE_SUBREDDIT:
-      return Object.assign({}, state, {
-        didInvalidate: true
-      })
-    case REQUEST_POSTS:
-      return Object.assign({}, state, {
-        isFetching: true,
-        didInvalidate: false
-      })
-    case RECEIVE_POSTS:
-      return Object.assign({}, state, {
-        isFetching: false,
-        didInvalidate: false,
-        items: action.posts,
-        lastUpdated: action.receivedAt
-      })
-    default:
-      return state
-  }
-}
-
-function postsBySubreddit(state = {}, action) {
-  switch (action.type) {
-    case INVALIDATE_SUBREDDIT:
-    case RECEIVE_POSTS:
-    case REQUEST_POSTS:
-      return Object.assign({}, state, {
-        [action.subreddit]: posts(state[action.subreddit], action)
-      })
-    default:
-      return state
-  }
-}
-
 const rootReducer = combineReducers({
-  pageData,
-  primaryNavigation,  
-  postsBySubreddit,
-  selectedSubreddit
+  pages,
+  pageByName,
+  primaryNavigation
 })
 
 export default rootReducer

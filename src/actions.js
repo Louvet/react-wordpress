@@ -6,10 +6,6 @@ export const RECEIVE_PAGE = 'RECEIVE_PAGE'
 export const REQUEST_PRIMARY_NAVIGATION = 'REQUEST_PRIMARY_NAVIGATION'
 export const RECEIVE_PRIMARY_NAVIGATION = 'RECEIVE_PRIMARY_NAVIGATION'
 
-export const REQUEST_POSTS = 'REQUEST_POSTS'
-export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
-export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 
 export function fetchPrimaryNavigation() {
   return dispatch => {
@@ -33,12 +29,31 @@ function receivePrimaryNavigation(json) {
   }
 }
 
+function shouldFetchPage(state, pageName) {
+  const page = state.pageByName[pageName]
+  if (!page) {
+    return true
+  } else if (page.isFetching) {
+    return false
+  } 
+
+  return false
+}
+
+export function fetchPageIfNeeded(pageName) {
+  return (dispatch, getState) => {
+    if (shouldFetchPage(getState(), pageName)) {
+      return dispatch(fetchPage(pageName))
+    }
+  }
+}
+
 export function fetchPage(pageName) {
   return dispatch => {
     dispatch(requestPage())
     return fetch(`http://dev.louvet.pro/wp-json/myroutes/page=` + pageName)
       .then(response => response.json())
-      .then(json => dispatch(receivePage(json)))
+      .then(json => dispatch(receivePage(pageName, json)))
   }
 }
 
@@ -48,76 +63,16 @@ function requestPage() {
   }
 }
 
-function receivePage(json) {
+function receivePage(pageName, json) {
   return {
     type: RECEIVE_PAGE,
-    title: json.title,
-    excerpt: json.excerpt,
-    content: json.content,
-    thumbnail: json.thumbnail,
-    publication: json.publication
-  }
-}
-
-
-
-
-
-
-export function selectSubreddit(subreddit) {
-  return {
-    type: SELECT_SUBREDDIT,
-    subreddit
-  }
-}
-
-export function invalidateSubreddit(subreddit) {
-  return {
-    type: INVALIDATE_SUBREDDIT,
-    subreddit
-  }
-}
-
-function requestPosts(subreddit) {
-  return {
-    type: REQUEST_POSTS,
-    subreddit
-  }
-}
-
-function receivePosts(subreddit, json) {
-  return {
-    type: RECEIVE_POSTS,
-    subreddit,
-    posts: json.data.children.map(child => child.data),
-    receivedAt: Date.now()
-  }
-}
-
-function fetchPosts(subreddit) {
-  return dispatch => {
-    dispatch(requestPosts(subreddit))
-    return fetch(`https://www.reddit.com/r/${subreddit}.json`)
-      .then(response => response.json())
-      .then(json => dispatch(receivePosts(subreddit, json)))
-  }
-}
-
-function shouldFetchPosts(state, subreddit) {
-  const posts = state.postsBySubreddit[subreddit]
-  if (!posts) {
-    return true
-  } else if (posts.isFetching) {
-    return false
-  } else {
-    return posts.didInvalidate
-  }
-}
-
-export function fetchPostsIfNeeded(subreddit) {
-  return (dispatch, getState) => {
-    if (shouldFetchPosts(getState(), subreddit)) {
-      return dispatch(fetchPosts(subreddit))
+    pageName: pageName,
+    pageData: {
+      title: json.title,
+      excerpt: json.excerpt,
+      content: json.content,
+      thumbnail: json.thumbnail,
+      publication: json.publication
     }
   }
 }

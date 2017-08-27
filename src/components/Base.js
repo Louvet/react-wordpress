@@ -7,6 +7,8 @@ class Base extends Component {
 
     return (
       <div className="page">  
+        {!pageData && <h2>Loading...</h2>}
+        {pageData &&
         <section>
           { pageData.thumbnail &&  
           <div dangerouslySetInnerHTML={{ __html: pageData.thumbnail }}></div>}
@@ -20,7 +22,7 @@ class Base extends Component {
           <footer>
             Publié le {pageData.publication}
           </footer>  
-        </section>
+        </section>}
 
         <PageFooter/>
       </div>

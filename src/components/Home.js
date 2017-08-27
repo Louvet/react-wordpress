@@ -5,16 +5,20 @@ class Home extends Component {
     const { pageData } = this.props
 
     return (
-      <section>
-        <header>
-          <h1>{pageData.title}</h1>
-        </header>
-        {pageData.content}
-      
-        <footer>
-          Publié le {pageData.publication}
-        </footer>  
-      </section>
+      <div>
+        {!pageData && <h2>Loading...</h2>}
+        {pageData &&
+        <section>
+          <header>
+            <h1>{pageData.title}</h1>
+          </header>
+          {pageData.content}
+        
+          <footer>
+            Publié le {pageData.publication}
+          </footer>  
+        </section>}
+      </div>
     )
   }
 }

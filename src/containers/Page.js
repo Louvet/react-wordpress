@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import {
-  fetchPage
+  fetchPageIfNeeded
 } from '../actions'
 
 const Page = (PageTemplate, pageName) => {
@@ -18,31 +18,31 @@ const Page = (PageTemplate, pageName) => {
   }  
 
   componentDidMount() {
-    this.props.dispatch(fetchPage(this.pageName))
+    this.props.dispatch(fetchPageIfNeeded(this.pageName))
   }    
   
   render() {
-    const { pageData } = this.props
-  
+    const { pages } = this.props
+
     return (
       <div>
-        {!pageData.isFetching && 
-        <PageTemplate {...this.props} pageData={pageData} />}
+        {!pages.isFetching && 
+        <PageTemplate {...this.props} pageData={pages.items[this.pageName]} />}
       </div>
       )
     }
   }
   
   PageComponent.propTypes = {
-    pageData: PropTypes.object.isRequired,
+    pages: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired
   }
   
   function mapStateToProps(state) {
-    const { pageData } = state
+    const { pages } = state
   
     return {
-      pageData
+      pages
     }
   }
 
