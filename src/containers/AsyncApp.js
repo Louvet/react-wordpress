@@ -77,7 +77,6 @@ class AsyncApp extends Component {
             <Route render={({ location }) => (
               <RouteTransition className="transition-wrapper"
                 pathname={location.pathname}
-
                 atEnter={{ opacity: 0, offset: 100 }} 
                 atLeave={{ opacity: spring(0, fadeConfig), offset: spring(-100, slideConfig) }} 
                 atActive={{ opacity: spring(1, slideConfig), offset: spring(0, slideConfig) }} 
