@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import PrimaryNavigation from '../components/PrimaryNavigation'
 import PageFooter from '../components/PageFooter'
 
 class BasePage extends Component {
   render() {
-    const { pageData, primaryNavigation } = this.props
+    const { pageData } = this.props
 
     return (
       <div className="page"> 
-        <PrimaryNavigation links={primaryNavigation.links}/> 
         {pageData &&
         <section>
           { pageData.thumbnail &&  

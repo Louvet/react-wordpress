@@ -24,6 +24,18 @@ injectGlobal`
   .transition-wrapper .page {
     position: absolute;
   }
+
+  .box {
+    width: 100px;
+    height: 100px;
+    background-color: #3498DB;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
 `
 const theme = {
   primary:  '#666666'

@@ -1,22 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
-import 'gsap'
-import { TimelineMax } from 'gsap' 
-import GSAP from 'react-gsap-enhancer'
-
-function createRevealAnim({target}) {
-  var items = target.find({id: 'primary-nav'}).findAllInChildren()
-
-  return new TimelineMax()
-  	.staggerFrom(items, 1, {opacity: 0, scale: .3}, .12)
-}
 
 class PrimaryNavigation extends Component {
-  componentDidMount() {
-      //this.addAnimation(createRevealAnim)
-  }
-
   render() {
     const { links } = this.props
 
@@ -50,4 +36,4 @@ PrimaryNavigation.propTypes = {
   links: PropTypes.object.isRequired
 }
 
-export default GSAP()(PrimaryNavigation)
+export default PrimaryNavigation

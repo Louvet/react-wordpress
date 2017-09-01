@@ -10,7 +10,7 @@ export const RECEIVE_PRIMARY_NAVIGATION = 'RECEIVE_PRIMARY_NAVIGATION'
 export function fetchPrimaryNavigation() {
   return dispatch => {
     dispatch(requestPrimaryNavigation())
-    return fetch(`http://dev.louvet.pro/wp-json/myroutes/menu`)
+    return fetch(`http://163.172.98.183/wp-json/myroutes/menu`)
       .then(response => response.json())
       .then(json => dispatch(receivePrimaryNavigation(json)))
   }
@@ -51,7 +51,7 @@ export function fetchPageIfNeeded(pageName) {
 export function fetchPage(pageName) {
   return dispatch => {
     dispatch(requestPage())
-    return fetch(`http://dev.louvet.pro/wp-json/myroutes/page=` + pageName)
+    return fetch(`http://163.172.98.183/wp-json/myroutes/page=` + pageName)
       .then(response => response.json())
       .then(json => dispatch(receivePage(pageName, json)))
   }
