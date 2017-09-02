@@ -6,6 +6,8 @@ export const RECEIVE_PAGE = 'RECEIVE_PAGE'
 export const REQUEST_PRIMARY_NAVIGATION = 'REQUEST_PRIMARY_NAVIGATION'
 export const RECEIVE_PRIMARY_NAVIGATION = 'RECEIVE_PRIMARY_NAVIGATION'
 
+export const RESPONSIVE_MODE = 'RESPONSIVE_MODE'
+
 
 export function fetchPrimaryNavigation() {
   return dispatch => {
@@ -26,6 +28,13 @@ function receivePrimaryNavigation(json) {
   return {
     type: RECEIVE_PRIMARY_NAVIGATION,
     links: json
+  }
+}
+
+export function swapMode(mode) {
+  return {
+    type: RESPONSIVE_MODE,
+    mode: mode
   }
 }
 

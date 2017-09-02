@@ -5,6 +5,8 @@ import {
   fetchPrimaryNavigation
 } from '../actions'
 
+import Responsiveness from './Responsiveness'
+
 import {
   BrowserRouter as Router,
   Route,
@@ -72,7 +74,7 @@ class AsyncApp extends Component {
     const slideConfig = { stiffness: 330, damping: 30 }
 
     return (
-      <div>
+      <Responsiveness>
       {primaryNavigation.links.tree != null &&         
         <Router>
           <div>
@@ -90,7 +92,7 @@ class AsyncApp extends Component {
           )}/>
           </div>
         </Router>}
-      </div>
+      </Responsiveness>
     )
   }
 }

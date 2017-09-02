@@ -4,6 +4,7 @@ import {
   RECEIVE_PAGE,
   REQUEST_PRIMARY_NAVIGATION,
   RECEIVE_PRIMARY_NAVIGATION,
+  RESPONSIVE_MODE
 } from './actions'
 
 function pages(
@@ -43,6 +44,22 @@ function pageByName(state = {}, action) {
   }
 }
 
+function responsiveMode(
+  state = {
+    mode: null
+  }, 
+  action
+) {
+  switch (action.type) {
+    case RESPONSIVE_MODE:
+      return Object.assign({}, state, {
+        mode: action.mode
+      })
+    default:
+      return state
+  }
+}
+
 function primaryNavigation(
   state = {
     isFetching: false, 
@@ -68,7 +85,8 @@ function primaryNavigation(
 const rootReducer = combineReducers({
   pages,
   pageByName,
-  primaryNavigation
+  primaryNavigation,
+  responsiveMode
 })
 
 export default rootReducer
