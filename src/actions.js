@@ -31,10 +31,11 @@ function receivePrimaryNavigation(json) {
   }
 }
 
-export function swapMode(mode) {
+export function swapMode(mode, mobile) {
   return {
     type: RESPONSIVE_MODE,
-    mode: mode
+    mode: mode,
+    mobile: mobile
   }
 }
 

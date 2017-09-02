@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
+
 import media from '../medias'
 
 import {
@@ -16,8 +16,6 @@ class Responsiveness extends Component {
   }
 
   componentDidMount() {
-    
-    console.log(media)
     const xxs = window.matchMedia('all and (max-width: 479px)');
     const xs = window.matchMedia('all and (min-width: 480px) and (max-width: 767px)');
     const sm = window.matchMedia('all and (min-width: 768px) and (max-width: 1023px)');
@@ -65,44 +63,42 @@ class Responsiveness extends Component {
 
   onXXSResponsiveBreakpoint(mediaQuery) {
         if (mediaQuery.matches) {
-          this.setState({ mode: 'xxs', mobile: true});
-          this.props.dispatch(swapMode('xxs'))
+          this.props.dispatch(swapMode('xxs', true))
         }
    }
 
    onXSResponsiveBreakpoint(mediaQuery) {
         if (mediaQuery.matches) {
-            this.setState({ mode: 'xs', mobile: true});
+            this.props.dispatch(swapMode('xs', true))
         }
    }
 
    onSMResponsiveBreakpoint(mediaQuery) {
         if (mediaQuery.matches) {
-            this.setState({ mode: 'sm', mobile: true});
+            this.props.dispatch(swapMode('sm', true))
         }
    }
 
    onMDResponsiveBreakpoint(mediaQuery) {
         if (mediaQuery.matches) {
             if(null != navigator.userAgent.match(/iPad/i)) {
-                this.setState({ mode: 'md', mobile: true});
+                this.props.dispatch(swapMode('md', true))
             } else {
-                this.setState({ mode: 'md', mobile: false});
+                this.props.dispatch(swapMode('md', false))
             }
         }
    }
 
    onLGResponsiveBreakpoint(mediaQuery) {
         if (mediaQuery.matches) {
-            this.setState({ mode: 'lg', mobile: false});
+            this.props.dispatch(swapMode('lg', false))
         }
    }
 
   render() {
     const { responsiveMode } = this.props
-    console.log('ici', responsiveMode)
     return (
-      <div className={this.state.mobile ? ('mobile ' + responsiveMode.mode) : (responsiveMode.mode)}>
+      <div className={responsiveMode.mobile ? ('mobile ' + responsiveMode.mode) : (responsiveMode.mode)}>
         {this.props.children}
       </div>
     );

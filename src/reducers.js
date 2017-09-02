@@ -46,14 +46,16 @@ function pageByName(state = {}, action) {
 
 function responsiveMode(
   state = {
-    mode: null
+    mode: null,
+    mobile: null
   }, 
   action
 ) {
   switch (action.type) {
     case RESPONSIVE_MODE:
       return Object.assign({}, state, {
-        mode: action.mode
+        mode: action.mode,
+        mobile: action.mobile
       })
     default:
       return state
