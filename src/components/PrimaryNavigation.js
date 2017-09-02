@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
-import hamburger from '../assets/img/hamburger.svg'
-
 class PrimaryNavigation extends Component {
   constructor(...args) {
     super(...args)
@@ -37,6 +35,7 @@ class PrimaryNavigation extends Component {
     const { links, responsiveMode } = this.props
     const opacity = responsiveMode.mobile && !this.state.menuVisible? 0:1
     const transform = !responsiveMode.mobile || this.state.menuVisible? 'translateY(0)':'translateY(-100%)'
+    const btnClassName = this.state.menuVisible? 'on':'off'
 
     const divSyles = {
       transform
@@ -44,7 +43,16 @@ class PrimaryNavigation extends Component {
 
     return (
       <div id="primary-nav">
-        {responsiveMode.mobile && <button id="primary-nav-btn" onClick={this.toggleMenu}><img src={hamburger} width="20"/>MENU</button>}
+        {responsiveMode.mobile && <button id="primary-nav-btn" className={btnClassName} onClick={this.toggleMenu}>
+          <svg>
+            <g id="bars" fill="#FFF">
+              <path d="M20.945,8.75c0,0.69-0.5,1.25-1.117,1.25H3.141c-0.617,0-1.118-0.56-1.118-1.25l0,0c0-0.69,0.5-1.25,1.118-1.25h16.688C20.445,7.5,20.945,8.06,20.945,8.75L20.945,8.75z"></path>
+              <path d="M20.923,15c0,0.689-0.501,1.25-1.118,1.25H3.118C2.5,16.25,2,15.689,2,15l0,0c0-0.689,0.5-1.25,1.118-1.25 h16.687C20.422,13.75,20.923,14.311,20.923,15L20.923,15z"></path>
+              <path d="M20.969,21.25c0,0.689-0.5,1.25-1.117,1.25H3.164c-0.617,0-1.118-0.561-1.118-1.25l0,0c0-0.689,0.5-1.25,1.118-1.25h16.688C20.469,20,20.969,20.561,20.969,21.25L20.969,21.25z"></path>
+            </g>
+          </svg>
+          <span>MENU</span>
+        </button>}
         <nav id="primary-nav-menu" style={divSyles}>
           <ul>
           {links.tree.map(function(menuItem, i) {

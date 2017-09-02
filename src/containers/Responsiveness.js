@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-import media from '../medias'
-
 import {
   swapMode
 } from '../actions'
