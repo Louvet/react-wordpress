@@ -17,9 +17,11 @@ import { RouteTransition } from 'react-router-transition'
 import spring from 'react-motion/lib/spring';
 
 import Page from './Page'
-import PrimaryNavigation from '../components/Header/Navigation/PrimaryNavigation/index'
+
 import HomePage from '../components/HomePage'
 import BasePage from '../components/BasePage'
+
+import SiteHeader from '../components/Header/index'
 
 class AsyncApp extends Component {
   componentDidMount() {
@@ -78,18 +80,18 @@ class AsyncApp extends Component {
       {primaryNavigation.links.tree != null &&         
         <Router>
           <div>
-          <PrimaryNavigation links={primaryNavigation.links}/>
-          <Route render={({ location }) => (
-            <RouteTransition className="transition-wrapper"
-              pathname={location.pathname}
-              atEnter={{ opacity: 0, offset: 100 }} 
-              atLeave={{ opacity: spring(0, fadeConfig), offset: spring(-100, slideConfig) }} 
-              atActive={{ opacity: spring(1, slideConfig), offset: spring(0, slideConfig) }} 
-              mapStyles={styles => ({ opacity: styles.opacity, transform: `translateX(${styles.offset}%)` })}
-              >
-              {this.buildRoutes(primaryNavigation.links.tree, location)}
-            </RouteTransition>
-          )}/>
+            <SiteHeader primaryNavigationLinks={primaryNavigation.links}/>
+            <Route render={({ location }) => (
+              <RouteTransition className="transition-wrapper"
+                pathname={location.pathname}
+                atEnter={{ opacity: 0, offset: 100 }} 
+                atLeave={{ opacity: spring(0, fadeConfig), offset: spring(-100, slideConfig) }} 
+                atActive={{ opacity: spring(1, slideConfig), offset: spring(0, slideConfig) }} 
+                mapStyles={styles => ({ opacity: styles.opacity, transform: `translateX(${styles.offset}%)` })}
+                >
+                {this.buildRoutes(primaryNavigation.links.tree, location)}
+              </RouteTransition>
+            )}/>
           </div>
         </Router>}
       </Responsiveness>
