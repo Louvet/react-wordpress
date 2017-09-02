@@ -17,7 +17,7 @@ import { RouteTransition } from 'react-router-transition'
 import spring from 'react-motion/lib/spring';
 
 import Page from './Page'
-import PrimaryNavigation from '../components/PrimaryNavigation'
+import PrimaryNavigation from '../components/Header/Navigation/PrimaryNavigation/index'
 import HomePage from '../components/HomePage'
 import BasePage from '../components/BasePage'
 

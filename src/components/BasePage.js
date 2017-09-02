@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import PageFooter from '../components/PageFooter'
+import PageFooter from '../components/Footer/PageFooter/index'
 
 class BasePage extends Component {
   render() {
