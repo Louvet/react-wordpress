@@ -46,8 +46,8 @@ function pageByName(state = {}, action) {
 
 function responsiveMode(
   state = {
-    mode: null,
-    mobile: null
+    mode: 'xxs',
+    mobile: true
   }, 
   action
 ) {

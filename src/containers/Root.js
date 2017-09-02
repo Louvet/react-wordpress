@@ -36,6 +36,54 @@ injectGlobal`
     right: 0;
     margin: auto;
   }
+
+
+  #primary-nav {
+    #primary-nav-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      z-index: 100;
+    }
+
+    #primary-nav-menu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 50;
+      width: 100%;
+      height: 100VH;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      background-color: #F6F6F6;
+      transition: transform 0.35s ease-in-out;
+
+      ul {
+        margin: 0;
+        padding: 0;
+
+        li {
+          list-style: none;
+        }
+      }
+    }
+  }
+
+  @media (min-width: 1024px) {
+    #primary-nav {
+      #primary-nav-menu {
+        height: 60px;
+
+        ul {
+          li {
+            display: inline-block;
+          }
+        }
+      }
+    }
+  }
 `
 const theme = {
   primary:  '#666666'

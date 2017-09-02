@@ -3,15 +3,20 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
+import hamburger from '../assets/img/hamburger.svg'
+
 class PrimaryNavigation extends Component {
   constructor(...args) {
     super(...args)
+
     const { responsiveMode } = this.props
     const initState = responsiveMode.mobile? false:true
 
     this.toggleMenu = this.toggleMenu.bind(this)
 
-    this.state = { menuVisible: initState }
+    this.state = { 
+      menuVisible: initState 
+    }
   }
 
   toggleMenu() {
@@ -20,19 +25,28 @@ class PrimaryNavigation extends Component {
     })
   }
 
+  componentDidUpdate() {
+    const { responsiveMode } = this.props
+
+    if(!responsiveMode.mobile && this.state.menuVisible) {
+      this.setState({ menuVisible: false })
+    }
+  }
+
   render() {
     const { links, responsiveMode } = this.props
-    const display = responsiveMode.mobile && !this.state.menuVisible? 'none':'block'
+    const opacity = responsiveMode.mobile && !this.state.menuVisible? 0:1
+    const transform = !responsiveMode.mobile || this.state.menuVisible? 'translateY(0)':'translateY(-100%)'
 
     const divSyles = {
-      display
+      transform
     }
 
     return (
-      <div>
-        {responsiveMode.mobile && <button onClick={this.toggleMenu}>MENU</button>}
-        <div style={divSyles}>
-          <ul id="primry-nav">
+      <div id="primary-nav">
+        {responsiveMode.mobile && <button id="primary-nav-btn" onClick={this.toggleMenu}><img src={hamburger} width="20"/>MENU</button>}
+        <nav id="primary-nav-menu" style={divSyles}>
+          <ul>
           {links.tree.map(function(menuItem, i) {
             if (menuItem.menu_item_children.length>0) {
                 return (
@@ -51,7 +65,7 @@ class PrimaryNavigation extends Component {
             }
           })}
           </ul>
-        </div>
+        </nav>
       </div>
     )
   }
