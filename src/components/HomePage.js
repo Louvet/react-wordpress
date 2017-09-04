@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 
 import PageFooter from '../components/Footer/PageFooter/index'
-import GSAP from 'react-gsap-enhancer';
-import TweenMax from 'gsap/TweenMax';
+import GSAP from 'react-gsap-enhancer'
+import TweenMax from 'gsap/TweenMax'
 import TransitionGroup from 'react-addons-transition-group'
 
 class Box extends Component {

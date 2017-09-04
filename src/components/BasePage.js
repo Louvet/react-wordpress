@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import PageFooter from '../components/Footer/PageFooter/index'
 
-class BasePage extends Component {
+class BasePage extends Component {  
   render() {
     const { pageData } = this.props
 

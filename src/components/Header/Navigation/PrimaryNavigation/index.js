@@ -21,6 +21,16 @@ class PrimaryNavigation extends Component {
     }
   }
 
+  componentWillEnter (callback) {
+    const el = this.nav;
+    TweenMax.fromTo(el, 1, {y: 100, opacity: 0}, {y: 0, opacity: 1, onComplete: callback});
+  }
+
+  componentWillLeave (callback) {
+    const el = this.nav;
+    TweenMax.fromTo(el, 1, {y: 0, opacity: 1}, {y: -100, opacity: 0, onComplete: callback});
+  }
+
   toggleMenu() {
     if(!this.state.menuVisible) {
       TweenMax.fromTo(this.menuNav, 0.25, {y: -this.menuNav.clientHeight, opacity: 1}, {y: 0, opacity: 1, onComplete: function(){ this.setState({
@@ -51,7 +61,7 @@ class PrimaryNavigation extends Component {
     }
 
     return (
-      <div id="primary-nav">
+      <div id="primary-nav" ref={nav => this.nav = nav}>
         {responsiveMode.mobile && <PrimaryNavigationButton className={btnClassName} onClick={this.toggleMenu}/>}
         <nav id="primary-nav-menu" ref={nav => this.menuNav = nav} style={divSyles}>
           <PrimaryNavigationMenu tree={links.tree}/>

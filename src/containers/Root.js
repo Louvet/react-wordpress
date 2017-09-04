@@ -148,6 +148,10 @@ injectGlobal`
   }
 
   @media (min-width: 1024px) {
+    #root {
+      padding-top: 80px;
+    }
+
     #primary-nav {
       #primary-nav-menu {
         height: 60px;
